@@ -79,22 +79,12 @@ be done with any number of fragments.
 
 This and other examples can be found in the `examples` directory.
 
-## Installation
-
-```sh
-npm install extenderball
-```
-
-## Documentation
-
-How to use Extenderball.
-
-### Usage
+## Usage
 
 Install it via `npm install extenderball` or download and drop it in the
 `node_modules` folder.
 
-Then include it in your project with the usual
+Then include it in your project as usual:
 
 ```js
 var Extenderball = require('extenderball');
@@ -102,11 +92,11 @@ var Extenderball = require('extenderball');
 
 ## Create, extendand and instantiate objects
 
-The EB constructor takes an array as its single parameter. This array contains
+The Extenderball constructor takes an array as its single parameter. This array contains
 paths to as many fragments as desired:
 
 ```js
-var MyObject = new EB([
+var MyObject = new Extenderball([
 	'objects/general/logging',
 	'objects/products/default',
 	'objects/products/computer'
@@ -125,7 +115,7 @@ Creating an object instance is done as usual:
 var myInstance = new MyObject();
 ```
 
-## Obhect Fragments
+## Write Object Fragments
 
 TODO: Must still be documented
 
