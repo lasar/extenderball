@@ -1,80 +1,141 @@
-# extenderball
+# Extenderball
 
-A work in progress. The idea is to assemble objects from multiple, flexibly combinable object fragments.
+Very flexible extendable objects.
+
+The idea is that object properties and methods are defined in "object
+fragments", where each fragment has its own file. The fragments can then be
+combined into one object as desired. That object can then be used to create as
+many instances as required.
+
+Goals:
+
+- Allow creation of small, self-contained bits of code
+- Reuse generic fragments in multiple "big" objects
+- Replace arbitrary amounts of code depending on current configuration
+
+I created this system as the basis for an online shopping platform. The platform
+is supposed to work in very different ways depending on the current setup. I
+wanted to be able to replace parts of the application logic depending on the
+project's configuration, the current user's settings and any other relevant
+factors. With Extenderball I can effectively replace single functions in an
+object.
+
+Note that Extenderball does not contain any logic for managing sets of object
+fragments. This is not part of this module's scope (yet).
+
+## Example
+
+A very simple example for an object fragment (let's say it's in the file `objects/example/fragment.js`):
+
+```js
+var ExampleFragment = function(eb, obj) {
+	obj.prototype.exampleProperty = 'Lazy dog';
+	obj.prototype.exampleMethod = function() {
+		return this.exampleProperty;
+	};
+};
+module.exports = ExampleFragment;
+```
+
+This fragment sets a property and adds a method. To use this fragment:
+
+```js
+var EB = require('extenderball');
+var MyObject = new EB(['objects/fragment']);
+var myInstance = new MyObject();
+// Use the instance
+console.log(myInstance.exampleMethod());
+```
+
+This is a lot of work for a single fragment. Let's create another fragment
+`objects/another`:
+
+```js
+var AnotherFragment = function(eb, obj) {
+	obj.prototype.anotherProperty = 'Crazy fox';
+	obj.prototype.anotherMethod = function() {
+		return this.exampleMethod()+', '+this.anotherProperty;
+	};
+};
+module.exports = AnotherFragment;
+```
+
+And then we extend the main code like this:
+
+```js
+var EB = require('extenderball');
+var MyObject = new EB([
+	'objects/fragment',
+	'objects/another'
+]);
+var myInstance = new MyObject();
+// Use the instance
+console.log(myInstance.exampleMethod());
+console.log(myInstance.anotherMethod());
+```
+
+The two object fragments were essentially merged into a single object. This can
+be done with any number of fragments.
+
+This and other examples can be found in the `examples` directory.
 
 ## Installation
 
-It will be in npm soon.
+```sh
+npm install extenderball
+```
 
-## Basic usage example
+## Documentation
 
-`index.js`:
+How to use Extenderball.
 
-```javascript
-// Include the module
-var EB = require('extenderball');
-// Create an object with a name (only used for debugging) and an array of paths to the fragments.
-var MyObject = new EB('SomeName', [
+### Usage
+
+Install it via `npm install extenderball` or download and drop it in the
+`node_modules` folder.
+
+Then include it in your project with the usual
+
+```js
+var Extenderball = require('extenderball');
+```
+
+## Create, extendand and instantiate objects
+
+The EB constructor takes an array as its single parameter. This array contains
+paths to as many fragments as desired:
+
+```js
+var MyObject = new EB([
 	'objects/general/logging',
 	'objects/products/default',
-	'objects/products/laptop'
+	'objects/products/computer'
 ]);
-// Create a new instance
-var myInstace = new MyObject();
-// Use the instance
-myInstance.log('Hello'); // from objects/general/logging
-myInstance.loadProduct(123); // from objects/products/default
-myInstance.log('Weight', myInstance.getBatteryLife()); // from objects/products/laptop
 ```
 
-Then we define the object fragments. The main function always gets passed the EB object as the first, the new object as the second argument.
+An object can be extended with additional fragments afterwards:
 
-`objects/general/logging`: Functions for logging.
-
-```javascript
-var GeneralLogging = function(eb, obj) {
-	obj.prototype.log = function() {
-		if(arguments.length>1) {
-			console.log('['+this.getEBName()+':'+arguments[0]+'] '+arguments[1]);
-		} else {
-			console.log('['+this.getEBName()+'] '+arguments[0]);
-		}
-	};
-};
-module.exports = GeneralLogging;
+```js
+MyObject.extend('objects/products/laptop');
 ```
 
-`objects/products/default`: Default code to handle a product
+Creating an object instance is done as usual:
 
-```javascript
-var ProductsDefault = function(eb, obj) {
-	obj.prototype.productId = null;
-	obj.prototype.productName = null;
-	obj.prototype.loadProduct = function(productId) {
-		this.productId = productId;
-		// Add code to fetch product from the database here.
-		this.productName = 'Generic product';
-	};
-	obj.prototype.getProductId = function() {
-		return this.productId;
-	};
-	obj.prototype.getProductName = function() {
-		return this.productName;
-	};
-};
-module.exports = ProductsDefault;
+```js
+var myInstance = new MyObject();
 ```
 
-`objects/products/laptop`:
+## Obhect Fragments
 
-```javascript
-var ProductsLaptop = function(eb, obj) {
-	obj.prototype.batteryLife = null;
-	obj.prototype.productName = null;
-	obj.prototype.getBatteryLife = function() {
-		// Get data for `this.productId` from database
-		return '8 hours';
-	};
-};
-module.exports = ProductsLaptop;
-```
+TODO: Must still be documented
+
+- How to write an object fragment
+- The init method
+
+## TODO
+
+- Check that a fragment is only loaded once
+- Error catching
+- Manage sets of fragments
+- Ability to access "parent" methods when overwriting a method.
+- 
