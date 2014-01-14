@@ -128,4 +128,3 @@ TODO: Must still be documented
 - Error catching
 - Manage sets of fragments
 - Ability to access "parent" methods when overwriting a method.
-- 
