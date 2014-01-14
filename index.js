@@ -1,23 +1,18 @@
 var path = require('path');
 
-var ExtenderBall = function(name, paths) {
-	var obj = this.createObj(name, paths);
+var ExtenderBall = function(paths) {
+	var obj = this.createObj(paths);
 	return obj;
 };
 
-ExtenderBall.prototype.createObj = function(name, paths) {
+ExtenderBall.prototype.createObj = function(paths) {
 	var obj = function() {
 		for(var i in this.init) {
 			this.init[i](this);
 		}
 	};
 	obj.prototype.init = [];
-	obj.prototype.ebName = name;
 	obj.prototype.ebPaths = [];
-
-	obj.prototype.getEBName = function() {
-		return this.ebName;
-	};
 
 	obj.prototype.getEBPaths = function() {
 		return this.ebPaths;
