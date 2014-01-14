@@ -1,0 +1,25 @@
+{
+    "name": "extenderball",
+    "version": "0.0.1",
+    "description": "Extenderball: Extendable JS objects",
+    "homepage": "https://github.com/lasar/extenderball",
+    "bugs": {
+    	"url": "https://github.com/lasar/extenderball/issues",
+    	"email": "lasar@liepins.net"
+    },
+    "license": "MIT",
+    "author": {
+    	"name": "Lasar Liepins",
+    	"email": "lasar@liepins.net",
+    	"url": "http://lasar.org/"
+    },
+    "repository": {
+    	"type": "git",
+    	"url": "https://github.com/lasar/extenderball.git"
+    },
+    "dependencies": {
+    },
+    "engines" : {
+    	"node": ">=0.10"
+    }
+}
