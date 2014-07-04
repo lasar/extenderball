@@ -19,14 +19,17 @@ ExtenderBall.prototype.createObj = function(paths) {
 	};
 
 	obj.extend = function(filePath) {
-		filePath = path.resolve(filePath);
+		if('undefined'===typeof window) { filePath = path.resolve(filePath); }
 		obj.prototype.ebPaths.push(filePath);
 		var Extender = require(filePath);
 		Extender(this, obj);
 	};
 
+	var filePath;
 	for(var p in paths) {
-		this.extend(obj, path.resolve(paths[p]));
+		filePath = paths[p];
+		if('undefined'===typeof window) { filePath = path.resolve(filePath); }
+		this.extend(obj, filePath);
 	}
 	return obj;
 };

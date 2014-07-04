@@ -1,6 +1,6 @@
 {
     "name": "extenderball",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Extenderball: Extendable JS objects",
     "homepage": "https://github.com/lasar/extenderball",
     "bugs": {
